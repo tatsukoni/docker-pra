@@ -20,3 +20,8 @@ RUN set -eux && \
 
 # php.ini
 COPY ./php.ini /usr/local/etc/php/php.ini
+
+# 起動
+COPY ./start.sh /start.sh
+RUN chmod a+x /start.sh
+CMD ["/start.sh"]
