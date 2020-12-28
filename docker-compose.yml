@@ -1,0 +1,22 @@
+version: "3.7"
+
+services:
+  nginx:
+    container_name: demo-app-nginx
+    build:
+      context: ./nginx
+      dockerfile: nginx.Dockerfile
+      args:
+        fpm_host: fpm
+    ports:
+      - "8080:80"
+    depends_on:
+      - fpm
+
+  fpm:
+    container_name: demo-app-fpm
+    build:
+      context: ./fpm
+      dockerfile: fpm.Dockerfile
+    volumes:
+      - ./web-app:/var/www
