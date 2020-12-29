@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HelloController;
+use App\Http\Controllers\PostController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +15,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('hello');
-});
+// Route::get('/', function () {
+//     return view('hello');
+// });
+
+Route::get('/', [HelloController::class, 'index'])->name('hello');;
+
+Route::post('/', [PostController::class, 'store']);
