@@ -2,31 +2,34 @@ version: "3.7"
 
 services:
   nginx:
-    container_name: demo-app-nginx
     build:
       context: ./nginx
       dockerfile: nginx.Dockerfile
       args:
         fpm_host: fpm
+    image: ecs-demo-nginx
+    container_name: container-demo-nginx
     ports:
       - "8080:80"
     depends_on:
       - fpm
 
   fpm:
-    container_name: demo-app-fpm
     build:
       context: ./fpm
       dockerfile: fpm.Dockerfile
+    image: ecs-demo-php-fpm
+    container_name: container-demo-fpm
     volumes:
       - ./web-app:/var/www
     depends_on:
       - db
 
   db:
-    container_name: demo-app-db
     build:
       context: ./db
       dockerfile: db.Dockerfile
+    image: ecs-demo-db
+    container_name: container-demo-db
     ports:
       - 3307:3306
