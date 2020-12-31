@@ -18,11 +18,13 @@ RUN set -eux && \
     unzip  && \
     docker-php-ext-install intl pdo_mysql zip bcmath
 
-# php.ini
-COPY ./php.ini /usr/local/etc/php/php.ini
+# copy mount file
+COPY docker/fpm/php.ini /usr/local/etc/php/php.ini
+COPY ./ /var/www
 
 # 起動
-COPY ./start.sh /start.sh
+COPY docker/fpm/start.sh /start.sh
 RUN chmod a+x /start.sh
+RUN chmod -R 757 /var/www/storage/
 WORKDIR /var/www
 CMD ["/start.sh"]

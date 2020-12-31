@@ -6,5 +6,5 @@ ENV MYSQL_DATABASE=local \
     MYSQL_ROOT_PASSWORD=secret \
     TZ=Asia/Tokyo
 
-COPY ./my.cnf /etc/mysql/conf.d/my.cnf
+COPY docker/db/my.cnf /etc/mysql/conf.d/my.cnf
 RUN chmod 644 /etc/mysql/conf.d/my.cnf

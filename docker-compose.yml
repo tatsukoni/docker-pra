@@ -3,11 +3,12 @@ version: "3.7"
 services:
   nginx:
     build:
-      context: ./nginx
+      context: web-app
       dockerfile: nginx.Dockerfile
       args:
         fpm_host: fpm
     image: ecs-demo-nginx
+    hostname: nginx
     container_name: container-demo-nginx
     ports:
       - "8080:80"
@@ -16,9 +17,10 @@ services:
 
   fpm:
     build:
-      context: ./fpm
+      context: web-app
       dockerfile: fpm.Dockerfile
     image: ecs-demo-php-fpm
+    hostname: fpm
     container_name: container-demo-fpm
     volumes:
       - ./web-app:/var/www
@@ -27,9 +29,10 @@ services:
 
   db:
     build:
-      context: ./db
+      context: web-app
       dockerfile: db.Dockerfile
     image: ecs-demo-db
+    hostname: db
     container_name: container-demo-db
     ports:
       - 3307:3306
