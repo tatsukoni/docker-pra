@@ -8,7 +8,7 @@
         <div class="header">
             <h1>hello!</h1>
         </div>
-        <div class="post-form">
+        <div class="form">
             <form action="/" method="post">
                 <!-- CSRF保護 -->
                 @csrf
@@ -20,6 +20,14 @@
                 </p>
                 <p>
                     <input type="submit" value="送信">
+                </p>
+            </form>
+            <form action="/" method="post">
+                <!-- CSRF保護 -->
+                @csrf
+                <input type="hidden" name="_method" value="DELETE">
+                <p>
+                    <input type="submit" value="投稿内容を削除">
                 </p>
             </form>
         </div>
