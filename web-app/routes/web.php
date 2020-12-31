@@ -19,6 +19,11 @@ use App\Http\Controllers\PostController;
 //     return view('hello');
 // });
 
-Route::get('/', [HelloController::class, 'index'])->name('hello');;
+Route::get('/', [HelloController::class, 'index'])->name('hello');
 
 Route::post('/', [PostController::class, 'store']);
+
+// ヘルスチェック用
+Route::get('/healthcheck', function () {
+    return ['health' => 'ok'];
+});
