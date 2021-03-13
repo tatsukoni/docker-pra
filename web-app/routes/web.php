@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HelloController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\DeleteController;
+use App\Http\Controllers\SqsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,6 +22,9 @@ Route::get('/', [HelloController::class, 'index'])->name('hello');
 Route::post('/', [PostController::class, 'store']);
 
 Route::delete('/', [DeleteController::class, 'delete']);
+
+// キュー用
+Route::get('/sqs', [SqsController::class, 'index'])->name('sqs');
 
 // ヘルスチェック用
 Route::get('/healthcheck', function () {

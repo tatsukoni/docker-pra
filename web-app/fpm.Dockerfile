@@ -22,6 +22,10 @@ RUN set -eux && \
 COPY docker/fpm/php.ini /usr/local/etc/php/php.ini
 COPY ./ /var/www
 
+# setting env
+ENV IS_FPM=1
+ENV IS_QUEUE=0
+
 # 起動
 COPY docker/fpm/start.sh /start.sh
 RUN chmod a+x /start.sh

@@ -23,6 +23,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        \Queue::looping(function() {
+            gc_collect_cycles();
+        });
     }
 }

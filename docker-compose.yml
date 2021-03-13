@@ -6,7 +6,7 @@ services:
       context: web-app
       dockerfile: nginx.Dockerfile
       args:
-        fpm_host: fpm
+        fpm_host: fpm # 本番では、127.0.0.1に変更したイメージをビルド
     image: ecs-demo-nginx
     hostname: nginx
     container_name: container-demo-nginx
@@ -24,6 +24,9 @@ services:
     container_name: container-demo-fpm
     volumes:
       - ./web-app:/var/www
+    environment:
+      AWS_ACCESS_KEY_ID: local # 初期化
+      AWS_SECRET_ACCESS_KEY: local # 初期化
     depends_on:
       - db
 
@@ -36,3 +39,11 @@ services:
     container_name: container-demo-db
     ports:
       - 3307:3306
+
+  sqs:
+    container_name: web-app-sqs
+    image: softwaremill/elasticmq
+    volumes:
+      - ./web-app/docker/sqs/custom.conf://opt/elasticmq.conf:ro
+    ports:
+      - 9325:9324
