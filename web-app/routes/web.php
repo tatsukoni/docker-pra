@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CheckController;
 use App\Http\Controllers\HelloController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\DeleteController;
@@ -30,3 +31,6 @@ Route::get('/sqs', [SqsController::class, 'index'])->name('sqs');
 Route::get('/healthcheck', function () {
     return ['health' => 'ok'];
 });
+
+// デザインパターンデモ
+Route::get('/check', [CheckController::class, 'index'])->name('sqs');
