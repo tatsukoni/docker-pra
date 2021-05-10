@@ -60,6 +60,9 @@ class CheckController extends Controller
         $this->colleagueSetUp();
     }
 
+    /**
+     * @param Request $request
+     */
     public function index(Request $request)
     {
         // 変更をMediatorに伝える
