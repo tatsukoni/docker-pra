@@ -1,17 +1,17 @@
 <?php
 
-namespace App\Packages\Domains\Colleague\Genre;
+namespace App\Packages\Domains\Colleague\Confirm;
 
 use App\Packages\Domains\Colleague\IColleague;
 use App\Packages\Domains\Mediator\IMediator;
 use Exception;
 
-class ColleagueGenre implements IColleague
+class ColleagueConfirm implements IColleague
 {
     /**
-     * @var Genre[]
+     * @var Confirm
      */
-    public array $genres = [];
+    public Confirm $confirm;
 
     /**
      * @var IMediator
@@ -34,6 +34,6 @@ class ColleagueGenre implements IColleague
         if (!isset($this->mediator)) {
             throw new Exception('Mediatorを設定してください');
         }
-        $this->genres = $this->mediator->instructToColleague($this);
+        $this->confirm = $this->mediator->instructToColleague($this);
     }
 }

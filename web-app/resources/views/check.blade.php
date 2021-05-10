@@ -9,17 +9,22 @@
             <h1>選択してください</h1>
         </div>
         <div class="form">
-            <form id="check" action="/check" method="get">
+            <form id="check" name="check" action="/check" method="get">
                 <!-- ジャンル -->
                 <h3>ジャンル</h3>
                 @foreach ($genres as $genre)
                     <input
                         type="radio"
                         name="genre"
-                        value="{{ $genre['value'] }}"
+                        value="{{ $genre->value }}"
+                        <?php
+                            if ($genre->isChecked) {
+                                echo 'checked="checked"';
+                            }
+                        ?>
                         onchange="document.forms.check.submit();"
                     >
-                    {{ $genre['desplay'] }}
+                    {{ $genre->display }}
                 @endforeach
                 <!-- 都道府県 -->
                 <h3>都道府県</h3>
@@ -27,10 +32,15 @@
                     <input
                         type="radio"
                         name="prefecture"
-                        value="{{ $prefecture['value'] }}"
+                        value="{{ $prefecture->value }}"
+                        <?php
+                            if ($prefecture->isChecked) {
+                                echo 'checked="checked"';
+                            }
+                        ?>
                         onchange="document.forms.check.submit();"
                     >
-                    {{ $prefecture['desplay'] }}
+                    {{ $prefecture->display }}
                 @endforeach
                 <!-- ランク -->
                 <h3>ランク</h3>
@@ -38,12 +48,30 @@
                     <input
                         type="radio"
                         name="rank"
-                        value="{{ $rank['value'] }}"
+                        value="{{ $rank->value }}"
+                        <?php
+                            if ($rank->isChecked) {
+                                echo 'checked="checked"';
+                            }
+                        ?>
                         onchange="document.forms.check.submit();"
                     >
-                    {{ $rank['desplay'] }}
+                    {{ $rank->display }}
                 @endforeach
+                <div class="confirm">
+                    <p>{{ $confirm->confirmMessage }}</p>
+                </div>
+                <input type="button" value="リセット" onclick="offradio();">
             </form>
         </div>
+
+        <script>
+            function offradio() {
+                var ElementsCount = document.check.elements.length;
+                for( i=0 ; i<ElementsCount ; i++ ) {
+                    document.check.elements[i].checked = false;
+                }
+            }
+        </script>
     </body>
 </html>

@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Packages\Domains\Colleague\Confirm\ColleagueConfirm;
 use App\Packages\Domains\Colleague\Genre\ColleagueGenre;
 use App\Packages\Domains\Colleague\Prefecture\ColleaguePrefecture;
 use App\Packages\Domains\Colleague\Rank\ColleagueRank;
 use App\Packages\Domains\Mediator\IMediator;
+use Exception;
 use Illuminate\Http\Request;
 
 class CheckController extends Controller
@@ -31,16 +33,30 @@ class CheckController extends Controller
      */
     private ColleagueRank $colleagueRank;
 
+    /**
+     * @var ColleagueConfirm
+     */
+    private ColleagueConfirm $colleagueConfirm;
+
+    /**
+     * @param IMediator $mediator
+     * @param ColleagueGenre $colleagueGenre
+     * @param ColleaguePrefecture $colleaguePrefecture
+     * @param ColleagueRank $colleagueRank
+     * @param ColleagueConfirm $colleagueConfirm
+     */
     public function __construct(
         IMediator $mediator,
         ColleagueGenre $colleagueGenre,
         ColleaguePrefecture $colleaguePrefecture,
-        ColleagueRank $colleagueRank
+        ColleagueRank $colleagueRank,
+        ColleagueConfirm $colleagueConfirm
     ) {
         $this->mediator = $mediator;
         $this->colleagueGenre = $colleagueGenre;
         $this->colleaguePrefecture = $colleaguePrefecture;
         $this->colleagueRank = $colleagueRank;
+        $this->colleagueConfirm = $colleagueConfirm;
         $this->colleagueSetUp();
     }
 
@@ -49,71 +65,22 @@ class CheckController extends Controller
         // 変更をMediatorに伝える
         $this->mediator->detectCheckValue($request);
 
-        // ColleagueがMediatorから指示を受ける
-        $genres = $this->colleagueGenre->askForMediator()->genres;
-        $prefectures = $this->colleaguePrefecture->askForMediator()->prefectures;
-        $ranks = $this->colleagueRank->askForMediator()->ranks;
-        $genres = [
-            [
-                'name' => 'genre1',
-                'value' => 'g-1',
-                'desplay' => '家族'
-            ],
-            [
-                'name' => 'genre2',
-                'value' => 'g-2',
-                'desplay' => '友人'
-            ],
-            [
-                'name' => 'genre3',
-                'value' => 'g-3',
-                'desplay' => '子供'
-            ],
-        ];
-        $prefectures = [
-            [
-                'name' => 'prefecture1',
-                'value' => 'p-1',
-                'desplay' => '北海道'
-            ],
-            [
-                'name' => 'prefecture2',
-                'value' => 'p-2',
-                'desplay' => '東京'
-            ],
-            [
-                'name' => 'prefecture3',
-                'value' => 'p-3',
-                'desplay' => '大阪'
-            ],
-            [
-                'name' => 'prefecture4',
-                'value' => 'p-4',
-                'desplay' => '沖縄'
-            ],
-        ];
-        $ranks = [
-            [
-                'name' => 'rank1',
-                'value' => 'r-1',
-                'desplay' => 'A'
-            ],
-            [
-                'name' => 'rank2',
-                'value' => 'r-2',
-                'desplay' => 'B'
-            ],
-            [
-                'name' => 'rank3',
-                'value' => 'r-3',
-                'desplay' => 'C'
-            ]
-        ];
-        // return
+        // ColleagueがMediatorからの指示を仰ぐ
+        try {
+            $this->colleagueGenre->askForMediator();
+            $this->colleaguePrefecture->askForMediator();
+            $this->colleagueRank->askForMediator();
+            $this->colleagueConfirm->askForMediator();
+        } catch (Exception $e) {
+            \Log::error($e);
+            abort(500);
+        }
+
         return view('check', [
-            'genres' => $genres,
-            'prefectures' => $prefectures,
-            'ranks' => $ranks
+            'genres' => $this->colleagueGenre->genres,
+            'prefectures' => $this->colleaguePrefecture->prefectures,
+            'ranks' => $this->colleagueRank->ranks,
+            'confirm' => $this->colleagueConfirm->confirm
         ]);
     }
 
@@ -122,5 +89,6 @@ class CheckController extends Controller
         $this->colleagueGenre->setMediator($this->mediator);
         $this->colleaguePrefecture->setMediator($this->mediator);
         $this->colleagueRank->setMediator($this->mediator);
+        $this->colleagueConfirm->setMediator($this->mediator);
     }
 }

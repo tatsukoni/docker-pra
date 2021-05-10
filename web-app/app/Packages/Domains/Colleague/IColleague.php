@@ -2,8 +2,17 @@
 
 namespace App\Packages\Domains\Colleague;
 
+use App\Packages\Domains\Mediator\IMediator;
+
 interface IColleague
 {
-    public function setMediator();
-    public function askCheckValuesForMediator();
+    /**
+     * @param IMediator $mediator
+     */
+    public function setMediator(IMediator $mediator);
+
+    /**
+     * @throws Exception
+     */
+    public function askForMediator();
 }
